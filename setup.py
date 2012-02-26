@@ -45,7 +45,7 @@ setup(
                 #"foo = my_package.some_module:main_func",
                 ],
             "gui_scripts": [
-                "bullseye = bullseye.bullseye.main"
+                "bullseye = bullseye.bullseye:main"
                 ],
             },
         include_package_data = True,
