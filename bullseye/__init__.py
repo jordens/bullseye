@@ -1,3 +1,3 @@
-from .capture import Capture, DummyCapture
+from .capture import BaseCapture, DummyCapture
 from .process import Process
 from .bullseye import Bullseye

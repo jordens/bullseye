@@ -23,10 +23,10 @@ from pydc1394 import camera2 as dc1394
 
 import logging
 
-from capture import Capture
+from .capture import BaseCapture
 
 
-class DC1394Capture(Capture):
+class DC1394Capture(BaseCapture):
     cam = Instance(dc1394.Camera)
 
     pixelsize = Float(3.75)

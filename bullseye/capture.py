@@ -24,7 +24,7 @@ from collections import deque
 import logging, time
 
 
-class Capture(HasTraits):
+class BaseCapture(HasTraits):
     pixelsize = Float(1.)
     width = Int(640)
     height = Int(480)
@@ -50,7 +50,7 @@ class Capture(HasTraits):
     save_format = Str
 
     def __init__(self, **k):
-        super(Capture, self).__init__(**k)
+        super(BaseCapture, self).__init__(**k)
         self.setup()
         px = self.pixelsize
         self.roi = [-self.width/px/2, -self.height/px/2,
@@ -158,7 +158,7 @@ class Capture(HasTraits):
         return im
 
 
-class DummyCapture(Capture):
+class DummyCapture(BaseCapture):
     def dequeue(self):
         px = self.pixelsize
         x, y = 20., 30.

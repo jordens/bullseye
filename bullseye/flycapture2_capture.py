@@ -24,10 +24,10 @@ import flycapture2 as fc2
 import numpy as np
 import logging
 
-from capture import Capture
+from .capture import BaseCapture
 
 
-class Fc2Capture(Capture):
+class Fc2Capture(BaseCapture):
     ctx = Instance(fc2.Context)
 
     pixelsize = Float(3.75)

@@ -13,5 +13,8 @@ Standards-Version: 3.9.1.0
 Package: python-bullseye
 Architecture: all
 XB-Python-Version: ${python:Versions}
-Depends: ${misc:Depends}, ${python:Depends}
+Depends: ${misc:Depends}, ${python:Depends},
+ python-chaco, python-traitsui, python-traits,
+ python-numpy
+Recommends: python-dc1394, python-flycapture2
 Description: Laser beam profiler

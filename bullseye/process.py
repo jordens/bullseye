@@ -24,12 +24,12 @@ import numpy as np
 import logging, bisect
 from threading import Thread
 
-from special_sums import angle_sum, polar_sum
-from capture import Capture
+from .special_sums import angle_sum, polar_sum
+from .capture import BaseCapture
 
 
 class Process(HasTraits):
-    capture = Instance(Capture)
+    capture = Instance(BaseCapture)
 
     thread = Instance(Thread)
     active = Bool(False)
