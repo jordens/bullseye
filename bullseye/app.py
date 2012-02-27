@@ -1,5 +1,5 @@
 from traits.trait_base import ETSConfig
-#ETSConfig.toolkit = "qt4"
+ETSConfig.toolkit = "qt4"
 # fix window color on unity
 if ETSConfig.toolkit == "wx":
     from traitsui.wx import constants

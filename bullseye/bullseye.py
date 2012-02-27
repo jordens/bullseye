@@ -31,8 +31,6 @@ from chaco.tools.api import (ZoomTool, SaveTool, ImageInspectorTool,
 
 from enthought.enable.component_editor import ComponentEditor
 
-import logging
-
 from .process import Process
 
 slider_editor=DefaultOverride(mode="slider")
