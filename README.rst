@@ -9,7 +9,7 @@ All monochrome cameras that are supported by libdc1394
 (http://www.ptgrey.com/support/downloads/download.asp)
 are suitable for laser beam profiling. That includes a lot of good and
 affordable firewire and USB cameras from several diffeent manufacturers
-(Basler, PointGrey, AVT...). 
+(http://damien.douxchamps.net/ieee1394/cameras/). 
 
 There are a few limitations:
 
@@ -58,23 +58,27 @@ packages from the python package index.
 Source
 ......
 
-Chaco, Traits and TraitsUI from enthought ara available prepackaged
-under most GNU/Linux systems, but also come included in the highly
-recommended Python distributions Python(x,y) (http://www.pythonxy.com)
-and the Enthough Python Distribution EPD
+Chaco, Traits and TraitsUI from enthought (http://code.enthought.com/)
+are available prepackaged under most GNU/Linux systems, but also come
+included in the highly recommended Python distributions Python(x,y)
+(http://www.pythonxy.com) and the Enthough Python Distribution EPD
 (http://www.enthought.com/products/epd.php) for Windows and Mac.
 
-To access cameras via libdc1394, the python wrappers pydc1394 ar needed.
-The bazaar branch is at lp:~jordens/pydc1394/work (``bzr branch
-lp:~jordens/pydc1394/work``), the Ubuntu/Debian package python-dc1394 is
-included in the PPA. From source, use ``sudo python setup.py develop``
-to link the source tree into your python installation.
+To access cameras via libdc1394, the python wrappers pydc1394
+(https://launchpad.net/pydc1394) are needed.  The bazaar branch is at
+lp:~jordens/pydc1394/work (``bzr branch lp:~jordens/pydc1394/work``),
+the Ubuntu/Debian package python-dc1394 is included in the PPA. From
+source, use ``sudo python setup.py develop`` to link the source tree
+into your python installation.
 
 Many cameras can also be accessed using the PointGrey flycapture2
-library via the Cython based wrapper pyflycapture2.  Get the source from
-the bazaar branch (``bzr branch lp:pyflycapture2``) and install it via
-the usual way or use ``sudo python setup.py develop``.
-
+library via the Cython based wrapper pyflycapture2
+(https://launchpad.net/pyflycapture2). Download the library and headers
+from PointGrey (http://www.ptgrey.com/support/downloads/download.asp
+account required, closed source) first, then install them.  Get the
+wrapper source from the bazaar branch (``bzr branch lp:pyflycapture2``)
+and install it via the usual way or use ``sudo python setup.py
+develop``.
 
 Usage
 -----
@@ -101,6 +105,14 @@ without pydc1394 or pyflycapture2 installed.
 User Interface
 ..............
 
+
+Beam size definition
+http://www.rp-photonics.com/spotlight_2007_07_11.html
+ISO-11146 (moments) versus least squares fit versus clipping
+http://www.rp-photonics.com/beam_radius.html
+offset control via background percentile, energy inclusion radius,
+roi, average, and dark frame subtraction
+
 camera settings
 shutter
 auto shutter
@@ -116,13 +128,19 @@ track
 
 image
 colormap
-markers
-horizonatal and vertical sum
-markers
-major and minor sum
-markers
+http://www.research.ibm.com/people/l/lloydt/color/color.HTM
+http://dx.doi.org/10.1109/MCG.2007.323435
+http://www.jwave.vt.edu/~rkriz/Projects/create_color_table/color_07.pdf
+for a accessible copy
+http://www.slideshare.net/ptomato/20101007-lunch-meeting
+
+2sigma, 6sigma markers
+horizonatal and vertical sum plot and gauss via moments
+green markers for 2sigma
+major and minor sum and gauss via moments
+green markers for 2sigma
 text field
-zooming and panning
-ctrl-s to save pdf as ``bullseye.pdf``
-save_format
+zooming and panning with mouse dragging and mousewheel
+ctrl-s to save pdf of main screen as ``bullseye.pdf``
+save images: --save_format
 csv output with --debug info and log filename
