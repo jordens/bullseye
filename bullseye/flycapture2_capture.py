@@ -32,12 +32,55 @@ class Fc2Capture(BaseCapture):
 
     pixelsize = Float(3.75)
     maxval = Int((1<<8)-1)
-    mode_name = Str("1280x960Y8")
 
     def __init__(self, index=0, **k):
         self.ctx = fc2.Context()
         self.ctx.connect(*self.ctx.get_camera_from_index(index))
         super(Fc2Capture, self).__init__(**k)
+
+    def setup(self):
+        self.ctx.set_video_mode_and_frame_rate(fc2.VIDEOMODE_1280x960Y8, 
+                fc2.FRAMERATE_15)
+        for prop in fc2.FRAME_RATE, fc2.SHUTTER, fc2.GAIN:
+            self._set_feature(prop,
+                    auto_manual_mode=False, on_off=True, abs_control=True)
+        for prop in fc2.AUTO_EXPOSURE, fc2.BRIGHTNESS:
+            self._set_feature(prop, on_off=False)
+        self.min_shutter = 1e-5
+        self.max_shutter = .1
+        self.add_trait("shutter", Range(
+            self.min_shutter, self.max_shutter,
+            self._get_feature(fc2.SHUTTER)))
+        self.max_framerate = 10
+        self.add_trait("framerate", Range(
+            1., self.max_framerate,
+            self._get_feature(fc2.FRAME_RATE)))
+        self.add_trait("gain", Range(
+            0., 24.,
+            self._get_feature(fc2.GAIN)))
+        self.width = int(1280)
+        self.height = int(960)
+
+    def _get_feature(self, prop):
+        v = self.ctx.get_property(prop)
+        return v["abs_value"]
+
+    def _set_feature(self, prop, **kw):
+        v = self.ctx.get_property(prop)
+        v.update(kw)
+        self.ctx.set_property(**v)
+
+    @on_trait_change("framerate")
+    def _do_framerate(self, val):
+        self._set_feature(fc2.FRAME_RATE, abs_value=val)
+
+    @on_trait_change("shutter")
+    def _do_shutter(self, val):
+        self._set_feature(fc2.SHUTTER, abs_value=val)
+
+    @on_trait_change("gain")
+    def _do_gain(self, val):
+        self._set_feature(fc2.GAIN, abs_value=val)
 
     def start(self):
         try:
@@ -53,4 +96,5 @@ class Fc2Capture(BaseCapture):
         self.ctx.retrieve_buffer(im)
         return np.array(im)[:, :, 0]
 
-
+    def enqueue(self, im):
+        pass # image will be garbage collected
