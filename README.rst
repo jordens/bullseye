@@ -1,5 +1,5 @@
 Bullseye Laser Beam Profiler
-======================
+============================
 
 Cameras
 -------
