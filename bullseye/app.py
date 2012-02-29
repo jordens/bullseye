@@ -14,11 +14,11 @@ from .bullseye import Bullseye
 
 def main():
     p = optparse.OptionParser(usage="%prog [options]")
-    p.add_option("-c", "--camera", default="first:",
+    p.add_option("-c", "--camera", default="any:",
             help="camera uri (none:, first:, guid:b09d01009981f9, "
-                 "fc2first:, fc2index:0) "
+                 "fc2first:, fc2index:0, any:) "
                  "[%default]")
-    p.add_option("-s", "--save", default="",
+    p.add_option("-s", "--save", default=None,
             help="save images accordint to strftime() "
                 "format string, compressed npz format [%default]")
     p.add_option("-l", "--log",
@@ -46,6 +46,14 @@ def main():
     elif scheme == "none":
         from .capture import DummyCapture
         cam = DummyCapture()
+    elif scheme == "any":
+        try:
+            from .dc1394_capture import DC1394Capture
+            cam = DC1394Capture(None)
+        except ImportError:
+            from .flycapture2_capture import Fc2Capture
+            cam = Fc2Capture(0)
+    logging.debug("running with capture device: %s" % cam)
     proc = Process(capture=cam, save_format=opts.save)
     bull = Bullseye(process=proc)
     bull.configure_traits()
