@@ -92,14 +92,14 @@ class Process(HasTraits):
             w20 = self.rad*4*m20**.5
             w02 = self.rad*4*m02**.5
             rinc = ((w20**2+w02**2)/2)**.5
+        w02 = max(m02, 4)
+        w20 = max(m20, 4)
         lc = int(max(0, m10-w20))
         bc = int(max(0, m01-w02))
-        imc = imc[
-              int(max(0, m01-w02)):
-              int(min(imc.shape[0], m01+w02)),
-              int(max(0, m10-w20)):
-              int(min(imc.shape[1], m10+w20))]
-        return rinc, lc, bc, imc
+        tc = int(min(imc.shape[0], m01+w02))
+        rc = int(min(imc.shape[1], m10+w20))
+        imc = imc[bc:tc, lc:rc]
+        return rinc, lc, bc, rc, tc, imc
 
     def process(self, im):
         im = np.array(im)
@@ -114,7 +114,7 @@ class Process(HasTraits):
                 black += blackc
             m00, m10, m01, m20, m02, m11 = self.moments(imc)
             if i < self.crops-1:
-                rinc, dlc, dbc, imc = self.do_crop(
+                rinc, dlc, dbc, drc, dtc, imc = self.do_crop(
                         imc, m00, m10, m01, m20, m02, m11)
                 lc += dlc
                 bc += dbc
