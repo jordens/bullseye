@@ -31,7 +31,6 @@ def main():
             level=getattr(logging, opts.debug.upper()),
             format='%(asctime)s %(levelname)s %(message)s')
     scheme, loc, path, query, frag = urlparse.urlsplit(opts.camera)
-    print scheme, loc, path
     if scheme == "dc1394":
         from .dc1394_capture import DC1394Capture
         if loc == "guid":
