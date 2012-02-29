@@ -45,15 +45,15 @@ def main():
             from .dc1394_capture import DC1394Capture
             cam = DC1394Capture()
         except Exception, e:
-            logging.debug("dc1394 error: %s" % e)
+            logging.debug("dc1394 error: %s", e)
             try:
                 from .flycapture2_capture import Fc2Capture
                 cam = Fc2Capture()
             except Exception, e:
-                logging.debug("flycapture2 error: %s" % e)
+                logging.debug("flycapture2 error: %s", e)
                 from .capture import DummyCapture
                 cam = DummyCapture()
-    logging.debug("running with capture device: %s" % cam)
+    logging.debug("running with capture device: %s", cam)
     proc = Process(capture=cam, save_format=opts.save)
     bull = Bullseye(process=proc)
     bull.configure_traits()

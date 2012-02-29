@@ -16,8 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from traits.api import (HasTraits, Float, Int, Str, Range, Bool,
-        Instance, on_trait_change)
+from traits.api import (Float, Int, Str, Range, Instance, on_trait_change)
 
 from pydc1394 import camera2 as dc1394
 
@@ -30,7 +29,7 @@ class DC1394Capture(BaseCapture):
     cam = Instance(dc1394.Camera)
 
     pixelsize = Float(3.75)
-    maxval = Int((1<<8)-1)
+    maxval = Int((1 << 8) - 1)
     mode_name = Str("1280x960_Y8")
 
     def __init__(self, guid=None, **k):
@@ -59,7 +58,7 @@ class DC1394Capture(BaseCapture):
             self.cam.gain.absolute))
         self.width = int(self.mode.image_size[0])
         self.height = int(self.mode.image_size[1])
-        self.cam[0x1098] |= 1<<25 # activate dark current noise reduction
+        self.cam[0x1098] |= 1 << 25 # activate dark current noise reduction
 
     def start(self):
         try:

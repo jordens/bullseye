@@ -16,8 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from traits.api import (HasTraits, Float, Int, Str, Range, Bool,
-        Instance, on_trait_change)
+from traits.api import (Float, Int, Str, Range, Instance, on_trait_change)
 
 import flycapture2 as fc2
 
@@ -31,7 +30,7 @@ class Fc2Capture(BaseCapture):
     ctx = Instance(fc2.Context)
 
     pixelsize = Float(3.75)
-    maxval = Int((1<<8)-1)
+    maxval = Int((1 << 8) - 1)
 
     def __init__(self, index=0, **k):
         self.ctx = fc2.Context()

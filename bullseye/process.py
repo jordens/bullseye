@@ -225,7 +225,7 @@ class Process(HasTraits):
                 self.t, self.e,
                 self.black, self.peak, self.include_radius)
 
-        logging.info("beam: "+(("% 6.4g,"*len(fields)) % fields))
+        logging.info("beam: "+("% 6.4g,"*len(fields)), *fields)
 
         self.text = (
             u"centroid x: %.4g µm\n"

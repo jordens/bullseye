@@ -66,7 +66,7 @@ class BaseCapture(HasTraits):
         pass
 
     @on_trait_change("shutter, gain")
-    def _unset_dark(self, val):
+    def _unset_dark(self):
         self.dark = False
 
     @on_trait_change("dark")
@@ -113,7 +113,7 @@ class BaseCapture(HasTraits):
                 self.shutter = min(self.max_shutter,
                         self.shutter/adjustment_factor)
                 s = "+"
-            logging.debug("1%%>%g, t%s: %g" % (p, s, self.shutter))
+            logging.debug("1%%>%g, t%s: %g", p, s, self.shutter)
             if s == "=":
                 break
             else:
@@ -131,7 +131,7 @@ class BaseCapture(HasTraits):
         if self.save_format:
             name = time.strftime(self.save_format)
             np.savez_compressed(name, im)
-            logging.debug("saved as %s" % name)
+            logging.debug("saved as %s", name)
         im_ = np.array(im, dtype=np.int, copy=True)
         self.enqueue(im)
         im = im_

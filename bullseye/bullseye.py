@@ -17,9 +17,8 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from traits.api import (HasTraits, Range, Int, Float, Enum, Bool,
-        Unicode, Str, ListFloat, ListInt, Instance, Delegate, Trait,
-        Property, on_trait_change, TraitError, Array)
+from traits.api import (HasTraits, Enum, Bool,
+        Instance, Delegate, on_trait_change)
 
 from traitsui.api import (View, Item, UItem,
         HGroup, VGroup, DefaultOverride)
@@ -33,7 +32,7 @@ from enthought.enable.component_editor import ComponentEditor
 
 from .process import Process
 
-slider_editor=DefaultOverride(mode="slider")
+slider_editor = DefaultOverride(mode="slider")
 
 
 class Bullseye(HasTraits):
@@ -191,8 +190,8 @@ class Bullseye(HasTraits):
                 text=self.process.text)
         self.mini.overlays.append(self.label)
 
-        self.plots = GridPlotContainer(shape=(2,2), padding=0,
-                spacing=(5,5), use_backbuffer=True,
+        self.plots = GridPlotContainer(shape=(2, 2), padding=0,
+                spacing=(5, 5), use_backbuffer=True,
                 bgcolor="lightgray")
         self.plots.component_grid = [[self.vert, self.screen],
                                      [self.mini, self.horiz ]]
