@@ -15,12 +15,12 @@ from .bullseye import Bullseye
 def main():
     p = optparse.OptionParser(usage="%prog [options]")
     p.add_option("-c", "--camera", default="any:",
-            help="camera uri (none:, first:, guid:b09d01009981f9, "
-                 "fc2first:, fc2index:0, any:) "
-                 "[%default]")
+            help="camera uri (none:, any:, guid:b09d01009981f9, "
+                 "fc2index:1) [%default]")
     p.add_option("-s", "--save", default=None,
             help="save images accordint to strftime() "
-                "format string, compressed npz format [%default]")
+                "format string (e.g. 'beam_%Y%m%d%H%M%S.npz'), "
+                "compressed npz format [%default]")
     p.add_option("-l", "--log",
             help="log output file [stderr]")
     p.add_option("-d", "--debug", default="info",
@@ -34,12 +34,6 @@ def main():
     if scheme == "guid":
         from .dc1394_capture import DC1394Capture
         cam = DC1394Capture(long(path))
-    elif scheme == "first":
-        from .dc1394_capture import DC1394Capture
-        cam = DC1394Capture(None)
-    elif scheme == "fc2first":
-        from .flycapture2_capture import Fc2Capture
-        cam = Fc2Capture(0)
     elif scheme == "fc2index":
         from .flycapture2_capture import Fc2Capture
         cam = Fc2Capture(int(path))
@@ -49,10 +43,16 @@ def main():
     elif scheme == "any":
         try:
             from .dc1394_capture import DC1394Capture
-            cam = DC1394Capture(None)
-        except ImportError:
-            from .flycapture2_capture import Fc2Capture
-            cam = Fc2Capture(0)
+            cam = DC1394Capture()
+        except Exception, e:
+            logging.debug("dc1394 error: %s" % e)
+            try:
+                from .flycapture2_capture import Fc2Capture
+                cam = Fc2Capture()
+            except Exception, e:
+                logging.debug("flycapture2 error: %s" % e)
+                from .capture import DummyCapture
+                cam = DummyCapture()
     logging.debug("running with capture device: %s" % cam)
     proc = Process(capture=cam, save_format=opts.save)
     bull = Bullseye(process=proc)

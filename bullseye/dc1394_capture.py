@@ -33,7 +33,7 @@ class DC1394Capture(BaseCapture):
     maxval = Int((1<<8)-1)
     mode_name = Str("1280x960_Y8")
 
-    def __init__(self, guid, **k):
+    def __init__(self, guid=None, **k):
         self.cam = dc1394.Camera(guid)
         super(DC1394Capture, self).__init__(**k)
 
