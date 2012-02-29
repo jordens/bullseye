@@ -15,8 +15,8 @@ from .bullseye import Bullseye
 def main():
     p = optparse.OptionParser(usage="%prog [options]")
     p.add_option("-c", "--camera", default="any:",
-            help="camera uri (none:, any:, guid:b09d01009981f9, "
-                 "fc2index:1) [%default]")
+            help="camera uri (none:, any:, dc1394://guid/b09d01009981f9, "
+                 "fc2://index/1) [%default]")
     p.add_option("-s", "--save", default=None,
             help="save images accordint to strftime() "
                 "format string (e.g. 'beam_%Y%m%d%H%M%S.npz'), "
@@ -31,12 +31,15 @@ def main():
             level=getattr(logging, opts.debug.upper()),
             format='%(asctime)s %(levelname)s %(message)s')
     scheme, loc, path, query, frag = urlparse.urlsplit(opts.camera)
-    if scheme == "guid":
+    print scheme, loc, path
+    if scheme == "dc1394":
         from .dc1394_capture import DC1394Capture
-        cam = DC1394Capture(long(path))
-    elif scheme == "fc2index":
+        if loc == "guid":
+            cam = DC1394Capture(long(path[1:], base=16))
+    elif scheme == "fc2":
         from .flycapture2_capture import Fc2Capture
-        cam = Fc2Capture(int(path))
+        if loc == "index":
+            cam = Fc2Capture(int(path[1:]))
     elif scheme == "none":
         from .capture import DummyCapture
         cam = DummyCapture()
