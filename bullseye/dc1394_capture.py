@@ -37,11 +37,14 @@ class DC1394Capture(BaseCapture):
         super(DC1394Capture, self).__init__(**k)
 
     def setup(self):
-        self.mode = self.cam.modes_dict[self.mode_name]
-        self.cam.mode = self.mode
+        self.cam.setup(active=False, exposure=None, brightness=None)
         self.cam.setup(active=True, mode="manual", absolute=True,
                 framerate=None, gain=None, shutter=None) # gamma=None
-        self.cam.setup(active=False, exposure=None, brightness=None)
+        self.mode = self.cam.modes_dict[self.mode_name]
+        self.cam.mode = self.mode
+        self.cam.rate = 7.5
+        self.width = int(self.mode.image_size[0])
+        self.height = int(self.mode.image_size[1])
         self.min_shutter = 1e-5 #round(self.cam.shutter.absolute_range[0], 5)
         self.max_shutter = .1 #round(self.cam.shutter.absolute_range[1], 2)
         self.add_trait("shutter", Range(
@@ -56,9 +59,7 @@ class DC1394Capture(BaseCapture):
             0, #round(self.cam.gain.absolute_range[0], 0),
             round(self.cam.gain.absolute_range[1], 0),
             self.cam.gain.absolute))
-        self.width = int(self.mode.image_size[0])
-        self.height = int(self.mode.image_size[1])
-        self.cam[0x1098] |= 1 << 25 # activate dark current noise reduction
+        # self.cam[0x1098] |= 1 << 25 # activate dark current noise reduction
 
     def start(self):
         try:
@@ -99,5 +100,3 @@ class DC1394Capture(BaseCapture):
 
     def flush(self):
         self.cam.flush()
-
-

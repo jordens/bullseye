@@ -110,7 +110,7 @@ class Process(HasTraits):
             if self.background > 0:
                 blackc = np.percentile(imc, self.background*100)
                 imc = imc-blackc
-                #np.clip(imc, 0, self.capture.maxval, out=imc)
+                np.clip(imc, 0, self.capture.maxval, out=imc)
                 black += blackc
             m00, m10, m01, m20, m02, m11 = self.moments(imc)
             if i < self.crops-1:
