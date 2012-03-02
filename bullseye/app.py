@@ -16,7 +16,7 @@ def main():
     p = optparse.OptionParser(usage="%prog [options]")
     p.add_option("-c", "--camera", default="any:",
             help="camera uri (none:, any:, dc1394://guid/b09d01009981f9, "
-                 "fc2://index/1) [%default]")
+                 "fc2://index/1, replay://glob/beam*.npz) [%default]")
     p.add_option("-s", "--save", default=None,
             help="save images accordint to strftime() "
                 "format string (e.g. 'beam_%Y%m%d%H%M%S.npz'), "
@@ -39,6 +39,10 @@ def main():
         from .flycapture2_capture import Fc2Capture
         if loc == "index":
             cam = Fc2Capture(int(path[1:]))
+    elif scheme == "replay":
+        from .replay_capture import ReplayCapture
+        if loc == "glob":
+            cam = ReplayCapture(path[1:])
     elif scheme == "none":
         from .capture import DummyCapture
         cam = DummyCapture()
