@@ -74,7 +74,7 @@ def angle_sum(m, angle, aspect=1., binsize=None):
     is interpreted as an image processing function.
 
     The full array sum is always strictly conserved:
-    	angle_sum(m, t).sum() == m.sum()
+        angle_sum(m, t).sum() == m.sum()
 
     The function uses floor(coordinate+.5) to bin (c.f. around, rint,
     trunc).
@@ -202,7 +202,7 @@ def polar_sum(m, center, direction, aspect=1., binsize=None):
     is interpreted as an image processing function.
 
     The full array sum is always strictly conserved:
-    	polar_sum(m, ...).sum() == m.sum()
+        polar_sum(m, ...).sum() == m.sum()
 
     The function uses (coordinate).astype(np.int) to bin.
 
