@@ -56,7 +56,9 @@ def main():
                 from .capture import DummyCapture
                 cam = DummyCapture()
     logging.debug("running with capture device: %s", cam)
-    proc = Process(capture=cam, save_format=opts.save)
+    if opts.save:
+        cam.save_format = opts.save
+    proc = Process(capture=cam)
     bull = Bullseye(process=proc)
     bull.configure_traits()
     bull.close()

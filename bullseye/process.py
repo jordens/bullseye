@@ -92,8 +92,8 @@ class Process(HasTraits):
             w20 = self.rad*4*m20**.5
             w02 = self.rad*4*m02**.5
             rinc = ((w20**2+w02**2)/2)**.5
-        w02 = max(m02, 4)
-        w20 = max(m20, 4)
+        w02 = max(w02, 4)
+        w20 = max(w20, 4)
         lc = int(max(0, m10-w20))
         bc = int(max(0, m01-w02))
         tc = int(min(imc.shape[0], m01+w02))
