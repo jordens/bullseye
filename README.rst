@@ -1,6 +1,14 @@
 Bullseye Laser Beam Profiler
 ============================
 
+Bullseye is a laser beam analysis application. Images can be
+acquired from any USB or Firewire camera using the DC1394
+standard supported by pydc1394 or pyflycapture2 from pointgrey.
+The beam analysis mostly adhere to ISO-11146 and determines
+centroid, 4-sigma width (~1/e^2 intensity width), rotation and
+ellipticity. The user interface is build on enthought/{traits,
+traitsui, chaco}.
+
 Cameras
 -------
 
