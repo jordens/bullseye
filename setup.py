@@ -31,7 +31,7 @@ The beam analysis mostly adhere to ISO-11146 and determines
 centroid, 4-sigma width (~1/e^2 intensity width), rotation and
 ellipticity. The user interface is build on enthought/{traits,
 traitsui, chaco}.""",
-        version = "0.1",
+        version = "0.1+dev",
         author = "Robert Jordens",
         author_email = "jordens@phys.ethz.ch",
         url = "http://launchpad.net/pybullseye",

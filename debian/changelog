@@ -1,5 +1,5 @@
-python-bullseye (0.1) unstable; urgency=low
+python-bullseye (0.1+dev) unstable; urgency=low
 
   * Initial packaging
 
- -- Robert Jordens <jordens@debian.org>  Mon, 27 Feb 2012 18:07:23 -0700
+ -- Robert Jordens <jordens@phys.ethz.ch>  Sat, 03 Mar 2012 15:20:34 -0700
