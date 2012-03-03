@@ -31,7 +31,9 @@ class ReplayCapture(BaseCapture):
         super(ReplayCapture, self).__init__(**k)
 
     def setup(self):
-        self.names = itertools.cycle(glob.glob(self.replay_glob))
+        names = glob.glob(self.replay_glob)
+        names.sort()
+        self.names = itertools.cycle(names)
         self.height, self.width = self.dequeue().shape
 
     def dequeue(self):
