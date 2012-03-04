@@ -51,6 +51,7 @@ class Bullseye(HasTraits):
 
     label = None
     gridm = None
+    grid = None
 
     traits_view = View(HGroup(VGroup(
         HGroup(
@@ -140,11 +141,13 @@ class Bullseye(HasTraits):
     def __init__(self, **k):
         super(Bullseye, self).__init__(**k)
         self.data = ArrayPlotData()
-        self.process.data = self.data
         self.process.initialize()
-
         self.setup_plots()
+        self.update_data()
         self.populate_plots()
+
+        self.on_trait_change(self.update_data, "process.new_data",
+                dispatch="fast_ui")
 
     def setup_plots(self):
         self.screen = Plot(self.data,
@@ -232,7 +235,7 @@ class Bullseye(HasTraits):
                 colormap=color_map_name_dict[self.colormap],
                 )[0]
         self.set_invert()
-        self.process.grid = self.screenplot.index
+        self.grid = self.screenplot.index
         self.gridm = self.screenplot.index_mapper
         t = ImageInspectorTool(self.screenplot)
         self.screen.tools.append(t)
@@ -304,7 +307,11 @@ class Bullseye(HasTraits):
         px = self.process.capture.pixelsize
         self.process.capture.roi = [l, b, r-l, t-b]
 
-    @on_trait_change("process.text")
-    def set_text(self, value):
+    def update_data(self):
         if self.label is not None:
-            self.label.text = value
+            self.label.text = self.process.text
+        upd = self.process.data
+        self.data.arrays.update(upd)
+        self.data.data_changed = {"changed": upd.keys()}
+        if self.grid is not None:
+            self.grid.set_data(upd["xbounds"], upd["ybounds"])

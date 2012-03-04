@@ -18,8 +18,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from traits.trait_base import ETSConfig
-ETSConfig.toolkit = "qt4"
-# fix window color on unity
+#ETSConfig.toolkit = "wx"
+# fix window color on unity TODO: gets overriden by splitter
 if ETSConfig.toolkit == "wx":
     from traitsui.wx import constants
     constants.WindowColor = constants.wx.NullColor

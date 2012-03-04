@@ -18,7 +18,7 @@
 
 
 from traits.api import (HasTraits, Float, Int, Unicode, Range, Bool,
-        Instance, on_trait_change)
+        Instance, on_trait_change, Dict, Event)
 
 import numpy as np
 import logging, bisect
@@ -54,7 +54,8 @@ class Process(HasTraits):
 
     text = Unicode
 
-    grid = None
+    data = Dict()
+    new_data = Event()
 
     def initialize(self):
         self.capture.start()
@@ -169,6 +170,7 @@ class Process(HasTraits):
 
         upd = dict((
             ("img", im),
+            # speed test: (im[:, :, None]*[[[1,1,1]]]).astype(np.uint8),
             ("xbounds", xbounds), ("ybounds", ybounds),
             ("x", x*px), ("y", y*px),
             ("imx", imx), ("imy", imy),
@@ -178,10 +180,8 @@ class Process(HasTraits):
             ("ga", ga), ("gb", gb),
             ))
         upd.update(self.markers())
-        self.data.arrays.update(upd)
-        self.data.data_changed = {"changed": upd.keys()}
-        if self.grid is not None:
-            self.grid.set_data(xbounds, ybounds)
+        self.data = upd
+        self.new_data = True
 
     def markers(self):
         px = self.capture.pixelsize
