@@ -164,8 +164,8 @@ class Process(HasTraits):
                   int(min(imb.shape[0], ycr+self.rad*wb/dab))]
         a = np.arange(ima.shape[0])*dab - min(xcr*dab, self.rad*wa)
         b = np.arange(imb.shape[0])*dab - min(ycr*dab, self.rad*wb)
-        ga = (m00/(np.pi**.5*wa/2/2**.5))*np.exp(-a**2*(2**.5*2/wa)**2)
-        gb = (m00/(np.pi**.5*wb/2/2**.5))*np.exp(-b**2*(2**.5*2/wb)**2)
+        ga = (m00/((2*np.pi)**.5*wa/4))*np.exp(-a**2/((wa/4)**2*2))
+        gb = (m00/((2*np.pi)**.5*wb/4))*np.exp(-b**2/((wb/4)**2*2))
 
         upd = dict((
             ("img", im),
@@ -280,9 +280,12 @@ class Process(HasTraits):
             im = self.capture.capture()
             if im is None:
                 continue
-            self.process(im.copy())
-            if self.track:
-                self.do_track()
+            try:
+                self.process(im.copy())
+                if self.track:
+                    self.do_track()
+            except ValueError:
+                pass # keep going
         logging.debug("stop")
         self.capture.stop()
         self.thread = None

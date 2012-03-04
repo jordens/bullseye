@@ -46,7 +46,7 @@ class Bullseye(HasTraits):
 
     process = Instance(Process)
 
-    colormap = Enum("gray", "jet", "hot", "prism", "hsv")
+    colormap = Enum("gray", "jet", "hot", "prism")
     invert = Bool(True)
 
     label = None
