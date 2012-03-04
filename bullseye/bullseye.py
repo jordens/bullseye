@@ -28,7 +28,7 @@ from chaco.api import (Plot, ArrayPlotData, color_map_name_dict,
 from chaco.tools.api import (ZoomTool, SaveTool, ImageInspectorTool,
         ImageInspectorOverlay, PanTool)
 
-from enthought.enable.component_editor import ComponentEditor
+from enable.component_editor import ComponentEditor
 
 from .process import Process
 
