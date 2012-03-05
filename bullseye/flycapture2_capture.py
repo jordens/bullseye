@@ -93,7 +93,7 @@ class Fc2Capture(BaseCapture):
     def dequeue(self):
         im = fc2.Image()
         self.ctx.retrieve_buffer(im)
-        return np.array(im)[:, :, 0]
+        return np.array(im)
 
     def enqueue(self, im):
         pass # image will be garbage collected
