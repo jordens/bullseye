@@ -37,7 +37,7 @@ setup(
         url = "http://launchpad.net/pybullseye",
         license = "GPLv3+",
         install_requires = [
-            "numpy", "scipy", "traits>=4", "chaco", "traitsui"],
+            "numpy", "traits>=4", "chaco", "traitsui"],
         extras_require = {
             "pydc1394": ["pydc1394"],
             "flycapture2": ["pyflycapture2"],
