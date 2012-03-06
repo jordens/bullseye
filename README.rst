@@ -154,3 +154,34 @@ ctrl-s to save pdf of main screen as ``bullseye.pdf``
 save images: --save_format
 replay with -camera replay://glob/path*.npz
 csv output with --debug info and --log log filename
+
+
+Wishlist/TODO
+-------------
+
+  * info in window title
+
+  * leastsq for those who think they need it
+
+  * black+jet colormap for those who think they need it
+
+  * peak intensity
+
+  * waist from peak curvature and peak height h*(1-x**2/sigma**2/2) in
+    \pm sigma/2
+
+  * speed: copy-less CMapImagePlot in chaco github, speed up ranges
+
+  * webcam/opencv (from Beams)
+
+  * auto tracking should move view
+
+  * float averaging or summing (from Beams)
+
+  * group ui with tabs or menus (from Beams)
+
+  * single-shot (from Beams)
+
+  * re-process once when not active
+
+  * save_format ui, save once
