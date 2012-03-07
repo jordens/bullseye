@@ -159,7 +159,9 @@ class BaseCapture(HasTraits):
 
 
 class DummyCapture(BaseCapture):
-    def dequeue(self):
+    _data = None
+
+    def setup(self):
         px = self.pixelsize
         x, y = 20., 30.
         a, c = 50/4., 40/4.
@@ -169,9 +171,10 @@ class DummyCapture(BaseCapture):
         i, j = (i-self.width/2)*px-x, (j-self.height/2)*px-y
         i, j = np.cos(t)*i+np.sin(t)*j, -np.sin(t)*i+np.cos(t)*j
         im = self.maxval*m*np.exp(-((i/a)**2+(j/c)**2)/2)
-        im *= 1+np.random.randn(*im.shape)*.1
+        self._data = im
+
+    def dequeue(self):
+        im = self._data
+        im = im*(1+np.random.randn(*im.shape)*.1)
         #im += np.random.randn(im.shape)*30
         return (im+.5).astype(np.uint8)
-
-
-
