@@ -185,3 +185,7 @@ Wishlist/TODO
   * re-process once when not active
 
   * save_format ui, save once
+
+  * fix a/b index range to not jump
+
+  * fix a/b rounding error

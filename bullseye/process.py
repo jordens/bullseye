@@ -154,23 +154,23 @@ class Process(HasTraits):
 
         #TODO: fix half pixel offset
         xc, yc = m10-im.shape[1]/2., m01-im.shape[0]/2.
-        dab = max(abs(np.cos(wt)), abs(np.sin(wt)))
-        ima = angle_sum(im, wt, binsize=dab) # minimize binning artefacts
+        dab = max(abs(np.cos(wt)), abs(np.sin(wt))) # minimize binning artefacts
+        ima = angle_sum(im, wt, binsize=dab)
         imb = angle_sum(im, wt+np.pi/2, binsize=dab)
         xcr = (np.cos(wt)*xc+np.sin(wt)*yc)/dab+ima.shape[0]/2.
         ycr = (-np.sin(wt)*xc+np.cos(wt)*yc)/dab+imb.shape[0]/2.
-        ima = ima[int(max(0, xcr-self.rad*wa/dab)):
-                  int(min(ima.shape[0], xcr+self.rad*wa/dab))]
-        imb = imb[int(max(0, ycr-self.rad*wb/dab)):
-                  int(min(imb.shape[0], ycr+self.rad*wb/dab))]
-        a = np.arange(ima.shape[0])*dab - min(xcr*dab, self.rad*wa)
-        b = np.arange(imb.shape[0])*dab - min(ycr*dab, self.rad*wb)
+        ima0 = int(max(0, xcr-self.rad*wa/dab))
+        imb0 = int(max(0, ycr-self.rad*wb/dab))
+        ima = ima[ima0:int(min(ima.shape[0], xcr+self.rad*wa/dab))]
+        imb = imb[imb0:int(min(imb.shape[0], ycr+self.rad*wb/dab))]
+        a = (np.arange(ima.shape[0]) + ima0 - xcr)*dab
+        b = (np.arange(imb.shape[0]) + imb0 - ycr)*dab
         ga = (m00/((2*np.pi)**.5*wa/4))*np.exp(-a**2/((wa/4)**2*2))
         gb = (m00/((2*np.pi)**.5*wb/4))*np.exp(-b**2/((wb/4)**2*2))
 
+        # im = (im[:, :, None]*[[[1,1,1]]]).astype(np.uint8) # speed test
         upd = dict((
             ("img", im),
-            # speed test: (im[:, :, None]*[[[1,1,1]]]).astype(np.uint8),
             ("xbounds", xbounds), ("ybounds", ybounds),
             ("x", x*px), ("y", y*px),
             ("imx", imx), ("imy", imy),

@@ -66,7 +66,7 @@ def angle_sum(m, angle, aspect=1., binsize=None):
     `angle` the output `o` is:
 
     .. math::
-      o_k = \\sum_l m_{i,j/a}, where
+      o_k = \\sum_l m_{i(l,k), j(l,k)/a}, where
       i(l,k) = \\cos(\\alpha) l - \\sin(\\alpha) k
       j(l,k) = \\sin(\\alpha) l + \\cos(\\alpha) k
 
