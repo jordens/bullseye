@@ -52,4 +52,18 @@ setup(
                 ],
             },
         include_package_data = True,
+        classifiers = [f.strip() for f in """
+            Development Status :: 4 - Beta
+            Environment :: X11 Applications :: GTK
+            Environment :: X11 Applications :: Qt
+            Intended Audience :: Science/Research
+            Intended Audience :: Telecommunications Industry
+            License :: OSI Approved :: GNU General Public License (GPL)
+            Operating System :: OS Independent
+            Programming Language :: Python :: 2
+            Topic :: Multimedia :: Graphics :: Capture :: Digital Camera
+            Topic :: Multimedia :: Video :: Capture
+            Topic :: Multimedia :: Video :: Display
+            Topic :: Scientific/Engineering :: Physics
+        """.splitlines() if f.strip()],
         )
