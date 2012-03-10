@@ -22,6 +22,7 @@ from setuptools import setup, find_packages
 
 setup(
         name = "bullseye",
+        version = "0.1.1+dev",
         description = "laser beam profiler",
         long_description = """
             Bullseye is a laser beam analysis application. Images can be
@@ -31,25 +32,23 @@ setup(
             and determines centroid, 4-sigma width (~1/e^2 intensity
             width), rotation and ellipticity. The user interface is
             build on enthought/{traits, chaco}.""",
-        version = "0.1.1+dev",
         author = "Robert Jordens",
         author_email = "jordens@phys.ethz.ch",
         url = "http://launchpad.net/pybullseye",
         license = "GPLv3+",
+        keywords = "laser beam profiler ccd camera gaussian",
         install_requires = [
             "numpy", "traits>=4", "chaco", "traitsui"],
         extras_require = {
             "pydc1394": ["pydc1394"],
             "flycapture2": ["pyflycapture2"],
             },
-        dependency_links = [],
+        #dependency_links = [],
         packages = find_packages(),
-        namespace_packages = [],
+        #namespace_packages = [],
         #test_suite = "bullseye.tests.test_all",
         entry_points = {
-            "gui_scripts": [
-                "bullseye = bullseye.app:main"
-                ],
+            "gui_scripts": ["bullseye = bullseye.app:main"],
             },
         include_package_data = True,
         classifiers = [f.strip() for f in """

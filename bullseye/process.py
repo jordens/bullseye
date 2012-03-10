@@ -177,8 +177,8 @@ class Process(HasTraits):
         b = np.arange(imb0-ycr, imb1-ycr)*dab
         ga = (m00/((2*np.pi)**.5*wa/4))*np.exp(-a**2/((wa/4)**2*2))
         gb = (m00/((2*np.pi)**.5*wb/4))*np.exp(-b**2/((wb/4)**2*2))
-        print self.poly(ima, xcr-ima0, (wa/4)**2), (wa/4)**2
-        print self.poly(imb, ycr-imb0, (wb/4)**2), (wb/4)**2
+        #print self.poly(ima, xcr-ima0, (wa/4)**2), (wa/4)**2
+        #print self.poly(imb, ycr-imb0, (wb/4)**2), (wb/4)**2
 
         # im = (im[:, :, None]*[[[1,1,1]]]).astype(np.uint8) # speed test
         upd = dict((
