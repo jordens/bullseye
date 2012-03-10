@@ -73,6 +73,14 @@ class Process(HasTraits):
         m11 = (im*x*y).sum()/m00
         return m00, m10, m01, m20, m02, m11
 
+    def poly(self, imx, m1, m2):
+	w = m2**.5/2 # +- .5sigma
+	l, h = int(max(0, m1-w)), int(min(imx.shape[0], m1+w))
+	imx = imx[l:h]
+        x = np.arange(l, h)-m1
+	p2, p1, p0 = np.polyfit(x, imx, 2)
+        return -2*p0/p2, p0
+
     def gauss(self, m00, m20, m02, m11):
         p = m00/(2*np.pi*(m02*m20-m11**2)**.5)
         q = ((m20-m02)**2+4*m11**2)**.5
@@ -152,7 +160,7 @@ class Process(HasTraits):
         gx = (m00/(2*np.pi*m20)**.5)*np.exp(-(x-self.x/px)**2/(m20*2))
         gy = (m00/(2*np.pi*m02)**.5)*np.exp(-(y-self.y/px)**2/(m02*2))
 
-        #TODO: fix half pixel offset
+        #TODO: center pixel bin rounding effect still there?
         xc, yc = m10-im.shape[1]/2., m01-im.shape[0]/2.
         dab = max(abs(np.cos(wt)), abs(np.sin(wt))) # minimize binning artefacts
         ima = angle_sum(im, wt, binsize=dab)
@@ -160,13 +168,17 @@ class Process(HasTraits):
         xcr = (np.cos(wt)*xc+np.sin(wt)*yc)/dab+ima.shape[0]/2.
         ycr = (-np.sin(wt)*xc+np.cos(wt)*yc)/dab+imb.shape[0]/2.
         ima0 = int(max(0, xcr-self.rad*wa/dab))
+	ima1 = int(min(ima.shape[0], xcr+self.rad*wa/dab))
         imb0 = int(max(0, ycr-self.rad*wb/dab))
-        ima = ima[ima0:int(min(ima.shape[0], xcr+self.rad*wa/dab))]
-        imb = imb[imb0:int(min(imb.shape[0], ycr+self.rad*wb/dab))]
-        a = (np.arange(ima.shape[0]) + ima0 - xcr)*dab
-        b = (np.arange(imb.shape[0]) + imb0 - ycr)*dab
+	imb1 = int(min(imb.shape[0], ycr+self.rad*wb/dab))
+        ima = ima[ima0:ima1]
+        imb = imb[imb0:imb1]
+	a = np.arange(ima0-xcr, ima1-xcr)*dab
+        b = np.arange(imb0-ycr, imb1-ycr)*dab
         ga = (m00/((2*np.pi)**.5*wa/4))*np.exp(-a**2/((wa/4)**2*2))
         gb = (m00/((2*np.pi)**.5*wb/4))*np.exp(-b**2/((wb/4)**2*2))
+	print self.poly(ima, xcr-ima0, (wa/4)**2), (wa/4)**2
+	print self.poly(imb, ycr-imb0, (wb/4)**2), (wb/4)**2
 
         # im = (im[:, :, None]*[[[1,1,1]]]).astype(np.uint8) # speed test
         upd = dict((
