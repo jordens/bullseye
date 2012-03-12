@@ -58,6 +58,10 @@ def main():
         from .flycapture2_capture import Fc2Capture
         if loc == "index":
             cam = Fc2Capture(int(path[1:]))
+    elif scheme == "opencv":
+        from .opencv_capture import OpenCVCapture
+        if loc == "index":
+            cam = OpenCVCapture(int(path[1:]))
     elif scheme == "replay":
         from .replay_capture import ReplayCapture
         if loc == "glob":
@@ -76,8 +80,13 @@ def main():
                 cam = Fc2Capture()
             except Exception, e:
                 logging.debug("flycapture2 error: %s", e)
-                from .capture import DummyCapture
-                cam = DummyCapture()
+                try:
+                    from .opencv_capture import OpenCVCapture
+                    cam = OpenCVCapture()
+                except Exception, e:
+                    logging.debug("opencv error: %s", e)
+                    from .capture import DummyCapture
+                    cam = DummyCapture()
     logging.debug("running with capture device: %s", cam)
     if opts.save:
         cam.save_format = opts.save
