@@ -17,18 +17,10 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from traits.trait_base import ETSConfig
-#ETSConfig.toolkit = "wx"
-# fix window color on unity TODO: gets overriden by splitter
-if ETSConfig.toolkit == "wx":
-    from traitsui.wx import constants
-    constants.WindowColor = constants.wx.NullColor
-
 import optparse, logging, urlparse
 
-#from .capture import BaseCapture, DummyCapture
 from .process import Process
-from .bullseye import Bullseye
+from .bullseye2 import Bullseye
 
 
 def main():
@@ -90,10 +82,8 @@ def main():
     logging.debug("running with capture device: %s", cam)
     if opts.save:
         cam.save_format = opts.save
-    proc = Process(capture=cam)
-    bull = Bullseye(process=proc)
-    bull.configure_traits()
-    bull.close()
+    proc = Process(cam)
+    bull = Bullseye.run(proc)
 
 if __name__ == "__main__":
     main()

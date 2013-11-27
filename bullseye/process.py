@@ -17,9 +17,6 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from traits.api import (HasTraits, Float, Int, Unicode, Range, Bool,
-        Instance, on_trait_change, Dict, Event)
-
 import numpy as np
 import logging, bisect
 from threading import Thread
@@ -28,34 +25,37 @@ from .special_sums import angle_sum, polar_sum
 from .capture import BaseCapture
 
 
-class Process(HasTraits):
-    capture = Instance(BaseCapture)
+class Process(object):
+    capture = None
 
-    thread = Instance(Thread)
-    active = Bool(False)
+    thread = None
+    active = False
 
-    track = Bool(False)
-    crops = Int(3) # crop iterations
-    rad = Float(3/2.) # crop radius in beam diameters
+    track = False
+    crops = 3 # crop iterations
+    rad = 3/2. # crop radius in beam diameters
 
-    background = Range(0., 1., 0.)
-    ignore = Range(0., .5, .01)
-    include_radius = Float
+    background = 0.
+    ignore = .01
+    include_radius = 0.
 
-    x = Float
-    y = Float
-    t = Float
-    e = Float
-    a = Float
-    b = Float
-    d = Float
-    black = Float
-    peak = Float
+    x = 0.
+    y = 0.
+    t = 0.
+    e = 0.
+    a = 0.
+    b = 0.
+    d = 0.
+    black = 0.
+    peak = 0.
 
-    text = Unicode
+    text = u""
 
-    data = Dict()
-    new_data = Event()
+    data = {}
+    new_data_cb = None
+
+    def __init__(self, capture):
+        self.capture = capture
 
     def initialize(self):
         self.capture.start()
@@ -195,8 +195,9 @@ class Process(HasTraits):
             ("ga", ga), ("gb", gb),
             ))
         upd.update(self.markers())
-        self.data = upd
-        self.new_data = True
+        self.data.update(upd)
+        if self.new_data_cb is not None:
+            self.new_data_cb()
 
     def markers(self):
         px = self.capture.pixelsize
@@ -260,33 +261,33 @@ class Process(HasTraits):
         #rx, ry = r*4*self.m20**.5, r*4*self.m02**.5
         self.capture.roi = [x, y, w, h]
 
-    @on_trait_change("active")
-    def _start_me(self, active):
-        if active:
-            if self.thread is not None:
-                if self.thread.is_alive():
-                    logging.warning(
-                            "already have a capture thread running")
-                    return
-                else:
-                    self.thread.join()
-            self.thread = Thread(target=self.run)
-            self.thread.start()
-        else:
-            if self.thread is not None:
-                self.thread.join(timeout=5)
-                if self.thread is not None:
-                    if self.thread.is_alive():
-                        logging.warning(
-                                "capture thread did not terminate")
-                        return
-                    else:
-                        logging.warning(
-                                "capture thread crashed")
-                        self.thread = None
+    def start(self):
+        if self.thread is not None:
+            if self.thread.is_alive():
+                logging.warning(
+                        "already have a capture thread running")
+                return
             else:
-                logging.debug(
-                    "capture thread terminated")
+                self.thread.join()
+        self.active = True
+        self.thread = Thread(target=self.run)
+        self.thread.start()
+
+    def stop(self):
+        self.active = False
+        if self.thread is None:
+            logging.debug(
+                "capture thread terminated")
+            return
+        self.thread.join(timeout=2)
+        if self.thread is not None:
+            if self.thread.is_alive():
+                logging.warning(
+                        "capture thread did not terminate")
+            else:
+                logging.warning(
+                        "capture thread crashed")
+                self.thread = None
 
     def run(self):
         logging.debug("start")

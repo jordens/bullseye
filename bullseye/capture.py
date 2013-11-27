@@ -16,48 +16,48 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from traits.api import (HasTraits, Float, Int, Str, Range, Bool,
-        ListFloat, Instance, Trait, Array, on_trait_change)
-
 import numpy as np
 from collections import deque
 import logging, time
 
 
-class BaseCapture(HasTraits):
-    pixelsize = Float(1.)
-    width = Int(640)
-    height = Int(480)
-    maxval = Int((1<<8)-1)
+class BaseCapture(object):
+    pixelsize = 1.
+    width = 640
+    height = 480
+    maxval = (1<<8) - 1
 
     min_shutter = 1.
     max_shutter = 1.
-    shutter = Range(1.)
-    auto_shutter = Bool(False)
-    gain = Range(1.)
-    framerate = Range(1)
-    max_framerate = Int(1)
+    shutter = 1.
+    auto_shutter = False
+    gain = 1.
+    framerate = 1
+    max_framerate = 1
 
-    roi = ListFloat(minlen=4, maxlen=4)
+    roi = [0, 0, -1, -1]
     
-    dark = Bool(False)
-    darkim = Trait(None, None, Array)
-    average = Range(1, 20, 1)
-    average_deque = Instance(deque, args=([], 20))
+    dark = False
+    darkim = None
+    average = 1
+    average_deque = deque([], 20)
 
-    im = Array
+    im = None
     
-    save_format = Str
+    save_format = ""
 
-    def __init__(self, **k):
-        super(BaseCapture, self).__init__(**k)
-        self.setup()
+    def __init__(self):
+        self.initialize()
         px = self.pixelsize
         self.roi = [-self.width/px/2, -self.height/px/2,
                 self.width, self.height]
+        self.update()
 
-    def setup(self):
+    def initialize(self):
         pass
+
+    def update(self):
+        self.update_bounds(self.roi)
 
     def start(self):
         pass
@@ -65,15 +65,6 @@ class BaseCapture(HasTraits):
     def stop(self):
         pass
 
-    @on_trait_change("shutter, gain")
-    def _unset_dark(self):
-        self.dark = False
-
-    @on_trait_change("dark")
-    def _do_dark(self):
-        self.darkim = None # invalidate
-
-    @on_trait_change("roi")
     def update_bounds(self, roi):
         l, b, w, h = roi
         px = self.pixelsize
@@ -161,7 +152,7 @@ class BaseCapture(HasTraits):
 class DummyCapture(BaseCapture):
     _data = None
 
-    def setup(self):
+    def initialize(self):
         px = self.pixelsize
         x, y = 20., 30.
         a, c = 50/4., 40/4.
