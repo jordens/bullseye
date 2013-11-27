@@ -112,9 +112,12 @@ class Process(HasTraits):
 
     def process(self, im):
         im = np.array(im)
-        imc = im
         lc, bc = 0, 0
         black = 0
+        if self.background > 0:
+            imc = im.copy()
+        else:
+	    imc = im
         for i in range(self.crops):
             if self.background > 0:
                 blackc = np.percentile(imc, self.background*100)
@@ -173,8 +176,8 @@ class Process(HasTraits):
         imb1 = int(min(imb.shape[0], ycr+self.rad*wb/dab))
         ima = ima[ima0:ima1]
         imb = imb[imb0:imb1]
-        a = np.arange(ima0-xcr, ima1-xcr)*dab
-        b = np.arange(imb0-ycr, imb1-ycr)*dab
+        a = np.arange((ima0-xcr)*dab, (ima1-xcr)*dab, dab)
+        b = np.arange((imb0-ycr)*dab, (imb1-ycr)*dab, dab)
         ga = (m00/((2*np.pi)**.5*wa/4))*np.exp(-a**2/((wa/4)**2*2))
         gb = (m00/((2*np.pi)**.5*wb/4))*np.exp(-b**2/((wb/4)**2*2))
         #print self.poly(ima, xcr-ima0, (wa/4)**2), (wa/4)**2
@@ -237,7 +240,7 @@ class Process(HasTraits):
                 self.t, self.e,
                 self.black, self.peak, self.include_radius)
 
-        logging.info("beam: "+("% 6.4g,"*len(fields)), *fields)
+        logging.info("beam: " + "% 6.4g,"*len(fields), *fields)
 
         self.text = (
             u"centroid x: %.4g µm\n"
