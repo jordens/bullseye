@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 #
 #   bullseye - ccd laser beam profilers (pydc1394 + chaco)
-#   Copyright (C) 2012 Robert Jordens <jordens@phys.ethz.ch>
+#   Copyright (C) 2012 Robert Jordens <robert@joerdens.org>
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
